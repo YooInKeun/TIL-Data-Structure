@@ -6,7 +6,7 @@ Data Structure Study with C
 ### 커밋 내용
 
 ```
-1. 자료구조 학습 내용 : Array, Stack, Queue, Linked List, Tree, Graph 등
+1. 자료구조 학습 내용 : Array, Linked List, Stack, Queue, Tree, Graph 등
 
 2. 자료구조와 관련된 알고리즘 Source Code
 ```
