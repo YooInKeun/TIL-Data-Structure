@@ -15,28 +15,24 @@ void insertNode(polyNode** firstNode, polyNode* newNode); // Node 삽입(항의 
 void printList(polyNode** firstNode); // Linked List 출력
 
 polyNode* Addition(polyNode** poly1, polyNode** poly2); // 두 개의 Polynomial의 합
+polyNode* Multiplication(polyNode** poly1, polyNode** poly2); // 두 개의 Polynomial의 곱
 
 int main() {
 
 	polyNode* A = NULL;
 	polyNode* B = NULL;
 
-	insertNode(&A, createNode(3, 2));
-	insertNode(&A, createNode(-5, 1));
-	insertNode(&A, createNode(4, 2));
-	insertNode(&A, createNode(4, 2));
-	insertNode(&A, createNode(6, 3));
-	insertNode(&A, createNode(5, 0));
-	insertNode(&A, createNode(3, 5));
+	insertNode(&A, createNode(5, 3));
+	insertNode(&A, createNode(-1, 1));
+	insertNode(&A, createNode(4, 0));
 
 	printf("A : ");
 	printList(&A);
 
-	insertNode(&B, createNode(-7, 3));
+	insertNode(&B, createNode(-1, 3));
 	insertNode(&B, createNode(6, 1));
-	insertNode(&B, createNode(1, 2));
-	insertNode(&B, createNode(5, 2));
-	insertNode(&B, createNode(-9, 0));
+	insertNode(&B, createNode(5, 0));
+	insertNode(&B, createNode(-3, 2));
 
 	printf("B : ");
 	printList(&B);
@@ -46,6 +42,12 @@ int main() {
 
 	printf("Polynomial Addition : ");
 	printList(&C);
+
+	polyNode* D = NULL; // D = A * B
+	D = Multiplication(&A, &B);
+
+	printf("Polynomial Multiplication : ");
+	printList(&D);
 
 	return 0;
 }
@@ -265,6 +267,28 @@ polyNode* Addition(polyNode** poly1, polyNode** poly2) { // 두 개의 Polynomia
 			insertNode(&myList, createNode(nodePtr1->coef, nodePtr1->exp));
 			nodePtr1 = nodePtr1->nextLink;
 		}
+	}
+
+	return myList;
+}
+
+polyNode* Multiplication(polyNode** poly1, polyNode** poly2) { // 두 개의 Polynomial의 곱
+
+	polyNode* nodePtr1 = *poly1;
+	polyNode* nodePtr2 = *poly2;
+
+	polyNode* myList = NULL; // poly1과 poly2의 곱을 담을 List
+
+	while (!(nodePtr1 == NULL)) { // poly1의 첫 항을 시작으로 poly2의 각각의 항과 곱하기
+
+		while (!(nodePtr2 == NULL)) { // poly2가 NULL이 될 때까지, 즉 poly2를 모두 탐색할 때까지
+
+			insertNode(&myList, createNode(nodePtr1->coef * nodePtr2->coef, nodePtr1->exp + nodePtr2->exp)); // insertNode 함수에 같은 항끼리 더해주는 기능이 있음
+			nodePtr2 = nodePtr2->nextLink;
+		}
+
+		nodePtr1 = nodePtr1->nextLink;
+		nodePtr2 = *poly2; // poly1의 다음 항과 곱하기 연산을 또 해야하기 때문에, nodePtr2를 poly2로 초기화
 	}
 
 	return myList;
