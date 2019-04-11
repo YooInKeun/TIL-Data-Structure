@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h> 
 
 typedef struct polyNode { // Polynomial Node 구현
 
@@ -16,11 +17,17 @@ void printList(polyNode** firstNode); // Linked List 출력
 
 polyNode* Addition(polyNode** poly1, polyNode** poly2); // 두 개의 Polynomial의 합
 polyNode* Multiplication(polyNode** poly1, polyNode** poly2); // 두 개의 Polynomial의 곱
+float Evaluation(polyNode** poly, int x); // x 값이 주어질 때, Polynomial 계산하기
 
 int main() {
 
 	polyNode* A = NULL;
 	polyNode* B = NULL;
+	polyNode* C = NULL; // C = A + B
+	polyNode* D = NULL; // D = A * B
+
+	int x;
+	float result;
 
 	insertNode(&A, createNode(5, 3));
 	insertNode(&A, createNode(-1, 1));
@@ -37,17 +44,24 @@ int main() {
 	printf("B : ");
 	printList(&B);
 
-	polyNode* C = NULL; // C = A + B
 	C = Addition(&A, &B);
 
-	printf("Polynomial Addition : ");
+	printf("Addition of Polynomials : ");
 	printList(&C);
 
-	polyNode* D = NULL; // D = A * B
 	D = Multiplication(&A, &B);
 
-	printf("Polynomial Multiplication : ");
+	printf("Multiplication of Polynomials : ");
 	printList(&D);
+
+	printf("대입할 정수 x 값을 입력하세요 : ");
+	scanf_s("%d", &x);
+	printf("\n");
+	printf("Evaluation of Polynomials with given a value %d", x);
+	printf("\n");
+	result = Evaluation(&B, x);
+	printf("Result = %.2f", result);
+	printf("\n");
 
 	return 0;
 }
@@ -253,7 +267,7 @@ polyNode* Addition(polyNode** poly1, polyNode** poly2) { // 두 개의 Polynomia
 
 	if (myCase == 1) {
 
-		while (!(nodePtr2 == NULL)) {
+		while (nodePtr2 != NULL) {
 
 			insertNode(&myList, createNode(nodePtr2->coef, nodePtr2->exp));
 			nodePtr2 = nodePtr2->nextLink;
@@ -262,7 +276,7 @@ polyNode* Addition(polyNode** poly1, polyNode** poly2) { // 두 개의 Polynomia
 
 	else if (myCase == 2) {
 
-		while (!(nodePtr1 == NULL)) {
+		while (nodePtr1 != NULL) {
 
 			insertNode(&myList, createNode(nodePtr1->coef, nodePtr1->exp));
 			nodePtr1 = nodePtr1->nextLink;
@@ -279,9 +293,9 @@ polyNode* Multiplication(polyNode** poly1, polyNode** poly2) { // 두 개의 Pol
 
 	polyNode* myList = NULL; // poly1과 poly2의 곱을 담을 List
 
-	while (!(nodePtr1 == NULL)) { // poly1의 첫 항을 시작으로 poly2의 각각의 항과 곱하기
+	while (nodePtr1 != NULL) { // poly1의 첫 항을 시작으로 poly2의 각각의 항과 곱하기
 
-		while (!(nodePtr2 == NULL)) { // poly2가 NULL이 될 때까지, 즉 poly2를 모두 탐색할 때까지
+		while (nodePtr2 != NULL) { // poly2가 NULL이 될 때까지, 즉 poly2를 모두 탐색할 때까지
 
 			insertNode(&myList, createNode(nodePtr1->coef * nodePtr2->coef, nodePtr1->exp + nodePtr2->exp)); // insertNode 함수에 같은 항끼리 더해주는 기능이 있음
 			nodePtr2 = nodePtr2->nextLink;
@@ -292,4 +306,19 @@ polyNode* Multiplication(polyNode** poly1, polyNode** poly2) { // 두 개의 Pol
 	}
 
 	return myList;
+}
+
+float Evaluation(polyNode** poly, int x) { // x 값이 주어질 때, Polynomial 계산하기
+
+	float result = 0;
+
+	polyNode* nodePtr = *poly;
+
+	while (nodePtr != NULL) {
+
+		result = result + (nodePtr->coef)*pow(x, nodePtr->exp);
+		nodePtr = nodePtr->nextLink;
+	}
+
+	return result;
 }
