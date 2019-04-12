@@ -23,17 +23,26 @@ int main() {
 
 	polyNode* A = NULL;
 	polyNode* B = NULL;
-	polyNode* C = NULL; // C = A + B
-	polyNode* D = NULL; // D = A * B
+	polyNode* C = NULL;
+
+	polyNode* D = NULL; // D = A + B
+	polyNode* E = NULL; // E = A + C
+	polyNode* F = NULL; // F = B + C
+
+	polyNode* G = NULL; // G = A * B
+	polyNode* H = NULL; // H = A * C
+	polyNode* I = NULL; // I = B * C
 
 	int x;
 	float result;
 
 	insertNode(&A, createNode(5, 3));
 	insertNode(&A, createNode(-1, 1));
-	insertNode(&A, createNode(4, 0));
+	insertNode(&A, createNode(2, 4));
+	insertNode(&A, createNode(-5, 4));
+	insertNode(&A, createNode(6, 0));
 
-	printf("A : ");
+	printf("A = ");
 	printList(&A);
 
 	insertNode(&B, createNode(-1, 3));
@@ -41,28 +50,79 @@ int main() {
 	insertNode(&B, createNode(5, 0));
 	insertNode(&B, createNode(-3, 2));
 
-	printf("B : ");
+	printf("B = ");
 	printList(&B);
 
-	C = Addition(&A, &B);
+	insertNode(&C, createNode(1, 4));
+	insertNode(&C, createNode(2, 5));
+	insertNode(&C, createNode(5, 1));
+	insertNode(&C, createNode(-2, 2));
+	insertNode(&C, createNode(6, 1));
 
-	printf("Addition of Polynomials : ");
+	printf("C = ");
 	printList(&C);
 
-	D = Multiplication(&A, &B);
+	D = Addition(&A, &B);
 
-	printf("Multiplication of Polynomials : ");
+	printf("D(= A + B) = ");
 	printList(&D);
 
+	E = Addition(&A, &C);
+
+	printf("E(= A + C) = ");
+	printList(&E);
+
+	F = Addition(&B, &C);
+
+	printf("F(= B + C) = ");
+	printList(&F);
+	
+	G = Multiplication(&A, &B);
+
+	printf("G(= A * B) = ");
+	printList(&G);
+
+	H = Multiplication(&A, &C);
+
+	printf("H(= A * C) = ");
+	printList(&H);
+
+	I = Multiplication(&B, &C);
+	
+	printf("I(= B * C) = ");
+	printList(&I);
+	
 	printf("대입할 정수 x 값을 입력하세요 : ");
 	scanf_s("%d", &x);
 	printf("\n");
 	printf("Evaluation of Polynomials with given a value %d", x);
-	printf("\n");
-	result = Evaluation(&B, x);
-	printf("Result = %.2f", result);
+	printf("\n\n");
+	result = Evaluation(&A, x);
+	printf("Result of A = %.2f", result);
 	printf("\n");
 
+	result = Evaluation(&B, x);
+	printf("Result of B = %.2f", result);
+	printf("\n");
+
+	result = Evaluation(&C, x);
+	printf("Result of C = %.2f", result);
+	printf("\n");
+
+	result = Evaluation(&D, x);
+	printf("Result of D = %.2f", result);
+	printf("\n");
+
+	result = Evaluation(&F, x);
+	printf("Result of F = %.2f", result);
+	printf("\n");
+
+	result = Evaluation(&I, x);
+	printf("Result of I = %.2f", result);
+	printf("\n");
+
+	printf("\n");
+	
 	return 0;
 }
 
@@ -224,11 +284,13 @@ polyNode* Addition(polyNode** poly1, polyNode** poly2) { // 두 개의 Polynomia
 		if (nodePtr1->exp > nodePtr2->exp) {
 
 			insertNode(&myList, createNode(nodePtr1->coef, nodePtr1->exp));
+			nodePtr1 = nodePtr1->nextLink;
 		}
 
 		else if (nodePtr1->exp == nodePtr2->exp) {
 
 			insertNode(&myList, createNode(nodePtr1->coef + nodePtr2->coef, nodePtr1->exp));
+			nodePtr1 = nodePtr1->nextLink;
 			nodePtr2 = nodePtr2->nextLink;
 		}
 
@@ -237,8 +299,6 @@ polyNode* Addition(polyNode** poly1, polyNode** poly2) { // 두 개의 Polynomia
 			insertNode(&myList, createNode(nodePtr2->coef, nodePtr2->exp));
 			nodePtr2 = nodePtr2->nextLink;
 		}
-
-		nodePtr1 = nodePtr1->nextLink;
 
 		/*
 
